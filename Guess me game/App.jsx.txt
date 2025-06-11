@@ -45,7 +45,7 @@ function App() {
   };
 
   const resetGame = () => {
-    setRevealed(Array(carItems.length).fill(false);
+    setRevealed(Array(carItems.length).fill(false));  // Fixed: Added missing parenthesis
     setAttempts(3);
     setMessage("Guess Me!");
     setGameOver(false);
@@ -82,4 +82,3 @@ function App() {
 }
 
 export default App;
-
