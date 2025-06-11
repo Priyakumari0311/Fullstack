@@ -1,0 +1,85 @@
+import React, { useState } from "react";
+import "./App.css";
+
+function App() {
+  const correctAnswer = "Tesla";
+
+  const carItems = [
+    { name: "Toyota", img: "https://up.yimg.com/ib/th?id=OIP.d7CWr6kgY5T85VuWT5qC1QHaEK&pid=Api&rs=1&c=1&qlt=95&w=215&h=121" },
+    { name: "Honda", img: "https://tse2.mm.bing.net/th?id=OIP.p3IQx_TeVoXggK8Nh0pYkwHaEK&pid=Api&P=0&h=180" },
+    { name: "Tesla", img: "https://tse4.mm.bing.net/th?id=OIF.dnS1XQ278qX2tMcTf00gnQ&pid=Api&P=0&h=180" }, // correct
+    { name: "Ford", img: "https://tse1.mm.bing.net/th?id=OIP.2gVOoBNPNc-RpVFW8iUq0gHaE8&pid=Api&P=0&h=180" },
+    { name: "BMW", img: "https://tse2.mm.bing.net/th?id=OIP.LTCDZumjFGRrjYFxNwTxBQHaE8&pid=Api&P=0&h=180" },
+    { name: "Mercedes", img: "https://tse4.mm.bing.net/th?id=OIP.SGNFWkUMxX_5Fd7Rosi1hQHaEo&pid=Api&P=0&h=180" },
+    { name: "Audi", img: "https://tse3.mm.bing.net/th?id=OIP.WJMMuUHH48wZZt_6nbz6eAHaEK&pid=Api&P=0&h=180" },
+    { name: "Porsche", img: "https://tse1.mm.bing.net/th?id=OIP.2rp8CC2fuUMSCvoXsdbBaQHaEK&pid=Api&P=0&h=180" },
+    { name: "Chevrolet", img: "https://tse2.mm.bing.net/th?id=OIP.Eguqwh5HnVX453RSe4cnCwHaE6&pid=Api&P=0&h=180" },
+  ];
+
+  const [revealed, setRevealed] = useState(Array(carItems.length).fill(false));
+  const [attempts, setAttempts] = useState(3);
+  const [message, setMessage] = useState("Guess Me!");
+  const [gameOver, setGameOver] = useState(false);
+
+  const handleClick = (index) => {
+    if (gameOver || revealed[index]) return;
+
+    const newRevealed = [...revealed];
+    newRevealed[index] = true;
+    setRevealed(newRevealed);
+
+    const chosenCar = carItems[index].name;
+    if (chosenCar === correctAnswer) {
+      setMessage("🎉 You guessed it! It's a Tesla!");
+      setGameOver(true);
+    } else {
+      const newAttempts = attempts - 1;
+      setAttempts(newAttempts);
+      if (newAttempts === 0) {
+        setMessage("❌ Out of attempts! Try again.");
+        setGameOver(true);
+      } else {
+        setMessage(`Wrong! Attempts left: ${newAttempts}`);
+      }
+    }
+  };
+
+  const resetGame = () => {
+    setRevealed(Array(carItems.length).fill(false);
+    setAttempts(3);
+    setMessage("Guess Me!");
+    setGameOver(false);
+  };
+
+  return (
+    <div className="app-container">
+      <div className="game-box">
+        <h1>🚗 Guess Me!</h1>
+        <p className="status">{message}</p>
+        <div className="grid">
+          {carItems.map((car, index) => (
+            <div
+              key={index}
+              className="card"
+              onClick={() => handleClick(index)}
+            >
+              {revealed[index] ? (
+                <img src={car.img} alt={car.name} />
+              ) : (
+                <span className="question">❓</span>
+              )}
+            </div>
+          ))}
+        </div>
+        {gameOver && (
+          <button className="reset-btn" onClick={resetGame}>
+            🔄 Try Again
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default App;
+
